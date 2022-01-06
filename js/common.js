@@ -4,6 +4,6 @@ jQuery.validator.addMethod('filesize', function (value, element, param) {
 
 jQuery.validator.addMethod("regex", function(value, element, regexp) {
     let result = value.match(regexp)
-    console.log('res', result, value)
+
     return result
 }, "Please check your input.");
