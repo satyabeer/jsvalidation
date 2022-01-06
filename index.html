@@ -104,19 +104,21 @@
 
     <script>
         jQuery(document).ready(function() {
-            const alphabetRegex = /^[a-zA-Z]+$/;
+            const alphabetRegex = /^[a-zA-Z]{3,10}$/;
             const fullNameRegex = /^((Mr\.|Mrs\.|Ms\.|Dr\.|Er\.)?\s{1})?[a-zA-Z\s]+[a-zA-Z]+$/i;
             const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,5}$/;
             const passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{8,16}$/;
             const phoneNumberRegex = /^\d{10}$/;
             const urlRegex = /(https?:\/\/(?:www\.|(?!www)))[a-zA-Z0-9][a-zA-Z0-9\-]+\.[a-zA-Z0-9][a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]*)*/gi;
             const allowedExtension = ['image/jpeg', 'image/png', 'image/jpg'];
-
+            const salutationList = ['Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Er.'];
             jQuery('form').validate({
                 errorClass: 'error-msg',
                 rules: {
                     firstname: {
                         required: true,
+                        minlength: 3,
+                        maxlength: 30,
                         regex: alphabetRegex
                     },
                     fullname: {
@@ -133,7 +135,6 @@
                     },
                     confirmpassword: {
                         required: true,
-                        regex: passwordRegex,
                         equalTo: "#password"
                     },
                     country: {
@@ -162,6 +163,57 @@
                         required: true,
                     },
                 },
+                messages: {
+                    firstname: {
+                        required: 'Enter the first name',
+                        minlength: 'First name must be of 3-30 characters long',
+                        maxlength: 'First name must be of 3-30 characters long',
+                        regex: 'First name contain alphabets only'
+                    },
+                    fullname: {
+                        required: 'Enter your full name',
+                        regex: 'Full name contain salutation with alphabets and space'
+                    },
+                    email: {
+                        required: 'Enter your email',
+                        regex: 'Invalid email addresses'
+                    },
+                    password: {
+                        required: 'Enter the password',
+                        minlength: 'Password must be 8-16 characters long',
+                        maxlength: 'Password must be 8-16 characters long',
+                        regex: 'Password contain only these [a-zA-Z0-9!@#$%^&*] letters',
+                    },
+                    confirmpassword: {
+                        required: 'Enter the confirm password',
+                        equalTo: "#password"
+                    },
+                    country: {
+                        required: 'Select the country',
+                    },
+                    phone: {
+                        required: 'Enter the phone number',
+                        regex: 'Phone number must be of 10 digits',
+                    },
+                    url: {
+                        required: 'Enter the url',
+                        regex: 'Invalid url link'
+                    },
+                    profile: {
+                        required: 'Upload the profile picture',
+                        accept: 'Allowed jpeg, jpg and png files',
+                        filesize: 'Maximum file size is 2Mb'
+                    },
+                    about: {
+                        required: 'Enter something about yourself',
+                    },
+                    gender: {
+                        required: 'Select the gender',
+                    },
+                    terms: {
+                        required: 'Check the terms and conditions',
+                    }
+                },
                 errorPlacement: function(error, element) {
                     let elementType = element.attr("type");
                     if (elementType == 'radio' || elementType == 'checkbox') {
@@ -170,7 +222,19 @@
                         error.insertAfter(element)
                     }
                 }
-            })
+            });
+
+            jQuery('input[name="fullname"]').keyup(function() {
+                let fullName = jQuery(this).val();
+                let salutation = fullName.slice(0, 3);
+                if (fullName.length >= 3) {
+                    if (jQuery.inArray(salutation, salutationList) !== -1 && fullName.charAt(3) != ' ') {
+                        fullName = fullName.split('.').join('. ');
+                    }
+                }
+                fullName = fullName.replace(/\s\s+/g, ' ');
+                jQuery(this).val(fullName);
+            });
 
             jQuery('input[type="file"]').change(function() {
                 // get the order
