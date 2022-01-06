@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Validation</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-validation.min.js"></script>
+    <script src="js/additional-methods.min.js"></script>
+    <script src="js/common.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h3 class="text-center mt-2">Jquery Validation</h3>
+        <hr>
+        <form class="form-row" method="post">
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="firstname">First Name</label>
+                    <input type="text" name="firstname" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" name="fullname" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control">
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input type="text" name="confirmpassword" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="country">Country</label>
+                    <select name="country" class="form-control">
+                        <option value="">Select</option>
+                        <option value="in">India</option>
+                        <option value="us">United State</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" name="phone" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label for="url">URL</label>
+                    <input type="text" name="url" class="form-control">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="col-md-12">
+                        <label for="profile">Profile Pic</label>
+                        <input type="file" name="profile" class="form-control" accept="image/png, image/jpeg, image/jpg">
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label for="about">About</label>
+                        <textarea name="about" cols="20" rows="10" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6 img-preview-container"></div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <label for="gender">Gender</label>
+                    <input type="radio" name="gender" id="male" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" name="gender" id="female" value="female">
+                    <label for="female">Female</label>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <input type="checkbox" name="terms" id="terms">
+                    <label for="terms">Terms and Conditions</label>
+                </div>
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <footer class="text-center">
+        <div class="copy-container">
+            <h6>&copy; Copyrights Reserved</h6>
+        </div>
+    </footer>
+
+    <script>
+        jQuery(document).ready(function() {
+            const alphabetRegex = /^[a-zA-Z]+$/;
+            const fullNameRegex = /^((Mr\.|Mrs\.|Ms\.|Dr\.|Er\.)?\s{1})?[a-zA-Z\s]+[a-zA-Z]+$/i;
+            const emailRegex = /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,5}$/;
+            const passwordRegex = /^[a-zA-Z0-9!@#$%^&*]{8,16}$/;
+            const phoneNumberRegex = /^\d{10}$/;
+            const urlRegex = /(https?:\/\/(?:www\.|(?!www)))[a-zA-Z0-9][a-zA-Z0-9\-]+\.[a-zA-Z0-9][a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]*)*/gi;
+            const allowedExtension = ['image/jpeg', 'image/png', 'image/jpg'];
+
+            jQuery('form').validate({
+                errorClass: 'error-msg',
+                rules: {
+                    firstname: {
+                        required: true,
+                        regex: alphabetRegex
+                    },
+                    fullname: {
+                        required: true,
+                        regex: fullNameRegex
+                    },
+                    email: {
+                        required: true,
+                        regex: emailRegex
+                    },
+                    password: {
+                        required: true,
+                        regex: passwordRegex,
+                    },
+                    confirmpassword: {
+                        required: true,
+                        regex: passwordRegex,
+                        equalTo: "#password"
+                    },
+                    country: {
+                        required: true,
+                    },
+                    phone: {
+                        required: true,
+                        regex: phoneNumberRegex,
+                    },
+                    url: {
+                        required: true,
+                        regex: urlRegex
+                    },
+                    profile: {
+                        required: true,
+                        accept: "image/jpeg, image/jpg, image/png",
+                        filesize: 2000000
+                    },
+                    about: {
+                        required: true,
+                    },
+                    gender: {
+                        required: true,
+                    },
+                    terms: {
+                        required: true,
+                    },
+                },
+                errorPlacement: function(error, element) {
+                    let elementType = element.attr("type");
+                    if (elementType == 'radio' || elementType == 'checkbox') {
+                        element.parent().append(error)
+                    } else {
+                        error.insertAfter(element)
+                    }
+                }
+            })
+
+            jQuery('input[type="file"]').change(function() {
+                // get the order
+                if (this.files.length > 0 && jQuery.inArray(this.files[0].type, allowedExtension) != -1 && this.files[0].size < 2000000) {
+                    let fileName = this.files[0].name;
+                    let fileType = fileName.substring(fileName.lastIndexOf('.') + 1)
+                    fileName = fileName.length > 20 ? fileName.substring(0, 20) + '...' + fileType : fileName;
+                    var reader = new FileReader();
+                    reader.fileName = fileName;
+                    reader.fileSize = ((this.files[0].size)/1024).toFixed(2) + ' kb';
+                    reader.onload = function(event) {
+                        var element = '<img src="'+ event.target.result +'"  alt="img"/><div class="img-preview-desc"><p class="m-0">File: '+ event.target.fileName +'</p><p class="m-0">Size: '+event.target.fileSize+'</p></div>';
+                        jQuery('div.img-preview-container').html(element);
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            })
+        });
+    </script>
+</body>
+</html>
